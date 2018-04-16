@@ -11,5 +11,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 
 app.listen(process.env.PORT || 8080, function () {
-  console.log('listening on port 3000');
+  console.log('listening on port 8080');
 });
