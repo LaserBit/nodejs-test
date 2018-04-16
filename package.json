@@ -10,5 +10,8 @@
     "node": "8.11.1"
   },
   "author": "laserbit",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
 }
