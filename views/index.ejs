@@ -9,45 +9,10 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
-    <form action="/" method="post">
-        <input type="text" name="user_name">
-        <input type="submit" value="投稿">
-    </form>
-
-    <form name="calculator">
-      <table border="1" bgcolor="#c0c0c0">
-        <tr>
-          <td align="center" colspan="4" bgcolor="#87cefa"><font color="#000000"><strong>電　卓</font></strong></td>
-        </tr>
-        <tr>
-          <td colspan="3"><input type="text" size="12" name="myLine" value="0"></td>
-          <td align="center"><input type="button" value="Ｃ" onclick="myC()"></td>
-        </tr>
-        <tr>
-          <td align="center"><input type="button" value="７" onclick="myValue(7)"></td>
-          <td align="center"><input type="button" value="８" onclick="myValue(8)"></td>
-          <td align="center"><input type="button" value="９" onclick="myValue(9)"></td>
-          <td align="center"><input type="button" value="÷" onclick="myCalculate('/')"></td>
-        </tr>
-        <tr>
-          <td align="center"><input type="button" value="４" onclick="myValue(4)"></td>
-          <td align="center"><input type="button" value="５" onclick="myValue(5)"></td>
-          <td align="center"><input type="button" value="６" onclick="myValue(6)"></td>
-          <td align="center"><input type="button" value="×" onclick="myCalculate('*')"></td>
-        </tr>
-        <tr>
-          <td align="center"><input type="button" value="１" onclick="myValue(1)"></td>
-          <td align="center"><input type="button" value="２" onclick="myValue(2)"></td>
-          <td align="center"><input type="button" value="３" onclick="myValue(3)"></td>
-          <td align="center"><input type="button" value="－" onclick="myCalculate('-')"></td>
-        </tr>
-        <tr>
-          <td align="center"><input type="button" value="０" onclick="myValue(0)"></td>
-          <td align="center"><input type="button" value="・" onclick="myValue('.')"></td>
-          <td align="center"><input type="button" value="＋" onclick="myCalculate('+')"></td>
-          <td align="center"><input type="button" value="＝" onclick="myCalculate('=')"></td>
-        </tr>
-      </table>
+    <a href="/calculation" target="_self">電卓</a>
+    <form action="/" method="POST">
+      <input type="text" name="title" placeholder="Enter your ID" required>
+      <input type="submit" value="Click here"/>
     </form>
   </body>
 </html>

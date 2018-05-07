@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title><%= title %></title>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <a href="/" target="_self">トップページ</a>
+
+    <form name="calculator">
+      <table border="1" bgcolor="#c0c0c0">
+        <tr>
+          <td align="center" colspan="4" bgcolor="#87cefa"><font color="#000000"><strong>電　卓</font></strong></td>
+        </tr>
+        <tr>
+          <td colspan="3"><input type="text" size="12" name="disp" value="0"></td>
+          <td align="center"><input type="button" value="C" onclick="push(this.value)"></td>
+        </tr>
+        <tr>
+          <td align="center"><input type="button" value="7" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="8" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="9" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="÷" onClick="push(this.value)" id="oper"></td>
+        </tr>
+        <tr>
+          <td align="center"><input type="button" value="4" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="5" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="6" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="×" onClick="push(this.value)"  id="oper"></td>
+        </tr>
+        <tr>
+          <td align="center"><input type="button" value="1" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="2" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="3" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="-" onClick="push(this.value)"  id="oper"></td>
+        </tr>
+        <tr>
+          <td align="center"><input type="button" value="0" onclick="push(this.value)"></td>
+          <td align="center"><input type="button" value="±" onclick="push(this.value)"  id="oper"></td>
+          <td align="center"><input type="button" value="+" onClick="push(this.value)"  id="oper"></td>
+          <td align="center"><input type="button" value="=" onclick="push(this.value)"  id="oper"></td>
+        </tr>
+      </table>
+    </form>
+    <script type="text/javascript" src="javascripts/calc.js"></script>
+  </body>
+</html>
