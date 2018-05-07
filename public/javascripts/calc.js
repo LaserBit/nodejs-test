@@ -3,6 +3,7 @@ var disp2 = 0;
 var ans = 0;
 var num = 0;
 var operator = "";
+var formula = "";
 
 function push(val) {
     if (0 <= val && val <= 9) {
@@ -27,28 +28,55 @@ function push(val) {
             document.calculator.disp.value = disp2;
         }
     } else {
-        if (val == "=") {
-            //ans = parseInt(disp) operator parseInt(disp2);
-            switch (operator) {
-                case "+":
-                    ans = parseInt(disp) + parseInt(disp2);
-                    break;
-                case "-":
-                    ans = parseInt(disp) - parseInt(disp2);
-                    break;
-                case "×":
-                    ans = parseInt(disp) * parseInt(disp2);
-                    break;
-                case "÷":
-                    ans = parseInt(disp) / parseInt(disp2);
-                    break;
-                default:
-                    break;
-            }
-            document.calculator.disp.value = ans;
-            disp = 0; disp2 = 0; ans = 0; num = 0; operator = "";
-        } else {
             operator = val;
-        }
     }
+}
+
+function calculate() {
+    switch (operator) {
+        case "+":
+            ans = parseInt(disp) + parseInt(disp2);
+            formula = disp + "+" + disp2 + "=" + ans;
+            break;
+        case "-":
+            ans = parseInt(disp) - parseInt(disp2);
+            formula = disp + "-" + disp2 + "=" + ans;
+            break;
+        case "×":
+            ans = parseInt(disp) * parseInt(disp2);
+            formula = disp + "×" + disp2 + "=" + ans;
+            break;
+        case "÷":
+            ans = parseInt(disp) / parseInt(disp2);
+            formula = disp + "÷" + disp2 + "=" + ans;
+            break;
+        default:
+            break;
+    }
+
+    // jsonの準備
+    var json = {
+        "formula": formula
+    };
+
+    // XMLHttpRequestオブジェクトの生成
+    var xhr = new XMLHttpRequest();
+
+    // methodとurlを指定
+    xhr.open("POST", "/calculation");
+
+    // イベントリスナを設定
+    xhr.addEventListener("progress", function(){}); // 通信中
+    xhr.addEventListener("load", function(){}); // 通信成功
+    xhr.addEventListener("error", function(){}); // 通信失敗
+    xhr.addEventListener("abort", function(){}); // 通信をキャンセル
+
+    // Content-Typeを設定
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    // 送信
+    xhr.send(JSON.stringify(json));
+    
+    document.calculator.disp.value = ans;
+    disp = 0; disp2 = 0; ans = 0; num = 0; operator = "", formula = "";
 }
