@@ -3,17 +3,10 @@ var path = require('path');
 var router = express.Router();
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
-var connection = require('../helpers/mysqlConnection.js');
+// var client = require('../private/postgreconnection');
 
 // DBと接続
-connection.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-    con.query("CREATE DATABASE mydb", function (err, result) {
-      if (err) throw err;
-      console.log("Database created");
-    });
-});
+//client.connect();
 
 // passport設定
 passport.use(new LocalStrategy(
@@ -32,26 +25,27 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function(user, done) {
-done(null, user);
+    done(null, user);
 });
 
 passport.deserializeUser(function(user, done) {
-done(null, user);
+    done(null, user);
 });
 
 router.get('/register', function(req, res, next) {
-    res.render('account/register', { title: '新規会員登録' });
+    res.render('account/register', { title: '新規ユーザー登録' });
 });
 
-router.post('/register', function(req, res, next) {
+router.post('/register', function (req, res, next) {
     var userName = req.body.user_name;
     var password = req.body.password;
-    var query = 'INSERT INTO users (user_name, password) VALUES (?, ?)';
-    connection.query(query, [userName, password], function(err, result) {
-        console.log("ERR" + err);
+    console.log("REGISTER" + userName + password);
+    // var query = 'INSERT INTO public.users (username, password) VALUES (userName, password)';
+    var query = 'INSERT INTO users (username, password) VALUES (userName, password)';
+    client.query(query, (err, res) => {
         if (err) throw err;
         console.log("RESULT" + result);
-        connection.release();
+        client.end();
     });
     res.redirect('../');
 });

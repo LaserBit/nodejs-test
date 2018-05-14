@@ -32,6 +32,8 @@ app.use(session({ secret: "i1ifhu8z", resave: true, saveUninitialized: false }))
 app.use(passport.initialize());
 app.use(passport.session());
 
+const { Client } = require('pg');
+
 // サーバーをポート 8080 で起動
 app.listen(process.env.PORT || 8080, function () {
   console.log('listening on port 8080');
