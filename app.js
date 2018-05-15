@@ -1,12 +1,13 @@
-var express = require('express');
-var path = require('path');
-var routes = require('./routes/index');
-var calculation = require('./routes/calculation');
-var account = require('./routes/account');
-var bodyParser = require('body-parser');
-var session = require("express-session");
-var passport = require("passport");
-var app = express();
+const express = require('express');
+const path = require('path');
+const routes = require('./routes/index');
+const calculation = require('./routes/calculation');
+const account = require('./routes/account');
+const bodyParser = require('body-parser');
+const session = require("express-session");
+const passport = require("passport");
+const db = require('./db')
+const app = express();
 
 // テンプレートエンジンを EJS に設定
 app.set('views', path.join(__dirname, 'views'));
@@ -32,9 +33,11 @@ app.use(session({ secret: "i1ifhu8z", resave: true, saveUninitialized: false }))
 app.use(passport.initialize());
 app.use(passport.session());
 
-const { Client } = require('pg');
-
 // サーバーをポート 8080 で起動
-app.listen(process.env.PORT || 8080, function () {
-  console.log('listening on port 8080');
+const server = app.listen(process.env.PORT || 8080, function () {
+    console.log('listening on port 8080');
 });
+
+server.on('close', () => {
+    client.end()
+})

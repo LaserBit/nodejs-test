@@ -1,56 +1,52 @@
-var express = require('express');
-var path = require('path');
-var router = express.Router();
-var passport = require("passport");
-var LocalStrategy = require("passport-local").Strategy;
-// var client = require('../private/postgreconnection');
-
-// DBと接続
-//client.connect();
+const express = require('express');
+const path = require('path');
+const router = express.Router();
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const db = require('../db')
 
 // passport設定
 passport.use(new LocalStrategy(
-    function(username, password, done) {
+    function (username, password, done) {
         User.findOne({ username: username }, function (err, user) {
             if (err) { return done(err); }
             if (!user) {
-            return done(null, false, { message: 'ユーザーIDが正しくありません。' });
+                return done(null, false, { message: 'ユーザーIDが正しくありません。' });
             }
             if (!user.validPassword(password)) {
-            return done(null, false, { message: 'パスワードが正しくありません。' });
+                return done(null, false, { message: 'パスワードが正しくありません。' });
             }
             return done(null, user);
         });
     }
 ));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
     done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
-router.get('/register', function(req, res, next) {
+router.get('/register', function (req, res, next) {
     res.render('account/register', { title: '新規ユーザー登録' });
 });
 
 router.post('/register', function (req, res, next) {
-    var userName = req.body.user_name;
-    var password = req.body.password;
-    console.log("REGISTER" + userName + password);
-    // var query = 'INSERT INTO public.users (username, password) VALUES (userName, password)';
-    var query = 'INSERT INTO users (username, password) VALUES (userName, password)';
-    client.query(query, (err, res) => {
-        if (err) throw err;
-        console.log("RESULT" + result);
-        client.end();
-    });
+    const userName = req.body.user_name;
+    const password = req.body.password;
+    const query = 'INSERT INTO public.users (user_name, password) VALUES ($1, $2)';
+    // DBと接続
+    db.connect();
+    db.query(query, [userName, password])
+        .then(result => console.log(result))
+        .catch(e => console.error(e.stack))
+        .then(() => db.end())
     res.redirect('../');
 });
 
-router.get('/login', function(req, res, next) {
+router.get('/login', function (req, res, next) {
     res.render('account/login', { title: 'ログイン' });
 });
 
@@ -58,7 +54,7 @@ router.post('/login',
     passport.authenticate('local', {
         failureRedirect: 'account/login',  // 失敗したときの遷移先
     }),
-    function(req, res, next){
+    function (req, res, next) {
         res.send("login success");
         res.redirect('../');
     }

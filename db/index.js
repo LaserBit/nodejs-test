@@ -1,7 +1,7 @@
-var { Client } = require('pg');
+const { Client } = require('pg');
 require('dotenv').config();
 
-var client = new Client({
+const client = new Pool({
     connectionString: process.env.DATABASE_URL || process.env.LOCAL_DATABASE_URL,
     ssl: true,
 });
