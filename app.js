@@ -21,11 +21,6 @@ app.use(bodyParser.json())
 // 静的ファイルは無条件に公開
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ルーティング設定
-app.use('/calculation', calculation);
-app.use('/account', account);
-app.use('/', routes);
-
 // セッションミドルウェア設定
 app.use(session({ secret: "i1ifhu8z", resave: true, saveUninitialized: false }));
 
@@ -33,11 +28,12 @@ app.use(session({ secret: "i1ifhu8z", resave: true, saveUninitialized: false }))
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ルーティング設定
+app.use('/calculation', calculation);
+app.use('/account', account);
+app.use('/', routes);
+
 // サーバーをポート 8080 で起動
 const server = app.listen(process.env.PORT || 8080, function () {
     console.log('listening on port 8080');
 });
-
-server.on('close', () => {
-    client.end()
-})

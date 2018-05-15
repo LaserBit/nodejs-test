@@ -3,21 +3,26 @@ const path = require('path');
 const router = express.Router();
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const db = require('../db')
+const pool = require('../db')
 
 // passport設定
 passport.use(new LocalStrategy(
-    function (username, password, done) {
-        User.findOne({ username: username }, function (err, user) {
-            if (err) { return done(err); }
-            if (!user) {
-                return done(null, false, { message: 'ユーザーIDが正しくありません。' });
+    function (username, password, cb) {
+        pool.query('SELECT id, user_name, password FROM users WHERE user_name=$1', [username], (err, result) => {
+            if (err) {
+                console.error('Error when selecting user on login', err)
+                return cb(err)
             }
-            if (!user.validPassword(password)) {
-                return done(null, false, { message: 'パスワードが正しくありません。' });
+            if (!result) {
+                return cb(null, false);
             }
-            return done(null, user);
-        });
+            if (result.rows.length > 0) {
+                const first = result.rows[0]
+                if (password == first.password) {
+                    cb(null, { id: first.id, username: first.username })
+                } else { cb(null, false) }
+            }
+        })
     }
 ));
 
@@ -38,11 +43,16 @@ router.post('/register', function (req, res, next) {
     const password = req.body.password;
     const query = 'INSERT INTO public.users (user_name, password) VALUES ($1, $2)';
     // DBと接続
-    db.connect();
-    db.query(query, [userName, password])
-        .then(result => console.log(result))
-        .catch(e => console.error(e.stack))
-        .then(() => db.end())
+    pool.connect().then(client => {
+        client.query(query, [userName, password]).then(res => {
+            client.release()
+            console.log("new user inserted")
+        })
+            .catch(e => {
+                client.release()
+                console.error('query error', e.message, e.stack)
+            })
+    })
     res.redirect('../');
 });
 
@@ -52,10 +62,10 @@ router.get('/login', function (req, res, next) {
 
 router.post('/login',
     passport.authenticate('local', {
-        failureRedirect: 'account/login',  // 失敗したときの遷移先
+        failureRedirect: './login',  // 失敗したときの遷移先
     }),
     function (req, res, next) {
-        res.send("login success");
+        console.log("login success")
         res.redirect('../');
     }
 );
